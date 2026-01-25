@@ -1,0 +1,42 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+
+# Virtual environment
+.venv/
+.venv-wsl/
+venv/
+env/
+
+# Django
+*.log
+*.pot
+*.py[cod]
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+.gitignore
+.git/
+.github/
+
+# If you collect static files
+
+# IDEs
+.idea/
+
+# Environment variables
+.env
+
+# Byte-compiled / optimized / DLL files
+*.pyc
+*.pyo
+*.pyd
+
+//tailwindcss
+package.json
+package-lock.json
+node_modules/
