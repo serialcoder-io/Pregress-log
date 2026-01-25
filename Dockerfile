@@ -4,9 +4,10 @@ WORKDIR /app
 
 COPY requirements.txt .
 
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN useradd -m admin
+RUN useradd -m admin && chown -R admin:admin /app
 USER admin
 
 COPY . .

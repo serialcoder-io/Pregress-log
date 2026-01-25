@@ -23,12 +23,10 @@ from django.utils.translation import gettext_lazy as _
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-r$v^080+q-%pdq%c@p$ag1!lgr#nr0p1w8zb+efe4_6u5gpumw'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', cast=bool, default=True)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='')
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv(), default='')
 
 
 # Application definition
@@ -40,9 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'users.app.UsersConfig',
-    'reviews.app.ReviewsConfig',
-    'tasks.app.TasksConfig',
+    'users.apps.UsersConfig',
+    'reviews.apps.ReviewsConfig',
+    'tasks.apps.TasksConfig',
 
     'allauth_ui',
     'allauth',
@@ -52,12 +50,10 @@ INSTALLED_APPS = [
 
     # other packages
     'django_cotton',
-    'django_countries',
     'django_quill',
     'cloudinary',
     'cloudinary_storage',
     'django_extensions',
-    'phonenumber_field',
     'widget_tweaks',
     'slippers',
 ]
@@ -167,7 +163,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # USER MODEL #
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'users.User'
 
 SITE_ID = 1
 ACCOUNT_LOGIN_METHODS = {'email'}
