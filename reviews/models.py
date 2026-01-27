@@ -24,7 +24,11 @@ class DailyReview(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
     created_at = models.DateTimeField(verbose_name=_('date created'), auto_now_add=True)
     description = QuillField(verbose_name=_('description'), blank=True, null=True)
-    skills = models.ManyToManyField('tasks.Skill', related_name='daily_reviews_for_skill', through=DailyReviewSkill)
+    skills = models.ManyToManyField(
+        'tasks.Skill', 
+        related_name='daily_reviews_for_skill', 
+        through=DailyReviewSkill
+    )
 
     def __str__(self):
         return f"Daily Review {self.created_at.date()}"
@@ -61,8 +65,6 @@ MONTH_CHOICES = [
     (11, _("November")),
     (12, _("December")),
 ]
-
-month = models.PositiveSmallIntegerField(choices=MONTH_CHOICES)
 
 
 class MonthlyReview(models.Model):

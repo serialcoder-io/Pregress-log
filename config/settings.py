@@ -56,9 +56,11 @@ INSTALLED_APPS = [
     'django_extensions',
     'widget_tweaks',
     'slippers',
+    'django_htmx',
 ]
 
 MIDDLEWARE = [
+    'django_htmx.middleware.HtmxMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -170,11 +172,11 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-# LOGIN_REDIRECT_URL = '/organizations/'
-LOGOUT_REDIRECT_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
 
-LOGIN_URL = '/login/'
-LOGOUT_URL = '/logout/'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {

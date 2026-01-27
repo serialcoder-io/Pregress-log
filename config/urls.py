@@ -14,9 +14,29 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
+from django.urls import include, path
+from users.views import index
 from django.contrib import admin
-from django.urls import path
+
+"""urlpatterns = [
+    path("i18n/", include("django.conf.urls.i18n")),  # switcher de langue
+]
+
+urlpatterns += i18n_patterns(
+    path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
+    path("", include("users.urls")),
+    path("tasks", include("tasks.urls")),
+    path("reviews", include("reviews.urls")),
+    path("", index, name="home"),
+)"""
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
+    path("account/", include("users.urls")),
+    path("tasks/", include("tasks.urls")),
+    path("reviews/", include("reviews.urls")),
+    path("", index, name="home"),
 ]

@@ -1,0 +1,23 @@
+{% load static %}
+{% load i18n %}
+{% load django_htmx %}
+<!DOCTYPE html>
+<html lang="fr" data-theme="bumblebee">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block title %}{% endblock%}
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+    {% htmx_script %}
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body hx-headers='{"x-csrftoken": "{{ csrf_token }}"}' class="bg-base-200 min-h-screen" id="body">
+    <div class="bg-base-200 min-h-screen" id="base-component">
+      {% block content %}
+
+      {% endblock %}
+    </div>
+    {% block extra_script %}{% endblock %}
+  </body>
+</html>

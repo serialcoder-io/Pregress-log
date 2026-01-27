@@ -16,6 +16,10 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError(_('The Email field must be set'))
         email = self.normalize_email(email)
+
+        if not extra_fields.get('display_name'):
+            extra_fields['display_name'] = email.split('@')[0]
+
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -36,9 +40,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
     email = models.EmailField(verbose_name=_('email address'), unique=True)
-    first_name = models.CharField(verbose_name=_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(verbose_name=_('last name'), max_length=30, blank=True)
-    avatar = models.ImageField(verbose_name=_('profile photo'), upload_to="avatars/", blank=True, null=True)
+    display_name = models.CharField(max_length=50, blank=True, null=True)
     is_active = models.BooleanField(verbose_name=_('active'), default=True)
     is_staff = models.BooleanField(verbose_name=_('staff status'), default=False)
     date_joined = models.DateTimeField(verbose_name=_('date joined'), auto_now_add=True)
@@ -49,6 +51,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
+
+    def save(self, *args, **kwargs):
+        if not self.display_name and self.email:
+            self.display_name = self.email.split('@')[0]
+            super().save(update_fields=['display_name'])
+        else:
+            super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email

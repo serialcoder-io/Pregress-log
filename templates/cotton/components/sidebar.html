@@ -1,0 +1,118 @@
+{% load i18n %}
+
+<!-- Sidebar -->
+<aside
+  id="sidebar"
+  class="fixed top-0 left-0 w-64 h-full transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out"
+>
+  <div class="border border-neutral-100 bg-base-200 h-full flex flex-col">
+    <!-- Sidebar Header -->
+    <div
+      class="flex items-center justify-between h-[60px] px-6 border-b-neutral-300 border-b"
+    >
+      <div class="flex items-center py-3">
+        <span class="bg-primary p-2 rounded-lg">
+          <svg
+            class="w-5 h-5 text-primary-content"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h6v2H7v-2z"
+            />
+          </svg>
+        </span>
+
+        <span class="ml-2 text-lg font-semibold text-text-primary"
+          >Progress Log</span
+        >
+      </div>
+      <!-- Close button for mobile -->
+      <button
+        id="sidebar-close"
+        class="lg:hidden p-2 text-text-secondary hover:text-text-primary rounded-lg hover:bg-secondary-100 transition-colors"
+      >
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto sidebar-nav">
+      <!-- Dashboard Section -->
+      <div class="mb-6">
+        <div class="space-y-2">
+          <c-components.ui.sidebar_link
+            text="Dashboard"
+            curr_path="dashboard"
+            url="{% url 'dashboard' %}"
+          >
+            <c-icons.chart />
+          </c-components.ui.sidebar_link>
+
+          <c-components.ui.sidebar_link 
+            text="Goals" 
+            curr_path="goals"
+            url="{% url 'goals' %}" 
+          >
+            <c-icons.users />
+          </c-components.ui.sidebar_link>
+
+          <c-components.ui.sidebar_link
+            text="Reviews"
+            curr_path="reviews"
+            url="{% url 'dashboard' %}"
+          >
+            <c-icons.building_office />
+          </c-components.ui.sidebar_link>
+
+          <c-components.ui.sidebar_link
+            text="Analytics"
+            curr_path="analytics"
+            url="{% url 'dashboard' %}"
+          >
+            <c-icons.building_office />
+          </c-components.ui.sidebar_link>
+
+           <c-components.ui.sidebar_link text="Settings" 
+            curr_path="settings" 
+            url="{% url 'dashboard' %}" 
+          >
+            <c-icons.building_office />
+          </c-components.ui.sidebar_link>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div
+      class="p-4 border-t border-t-neutral-300 h-[50px] rounded-b-xl flex items-center"
+    >
+      <div class="flex items-center">
+        <svg
+          class="w-6 h-6 text-primary"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M3 3h18v18H3V3zm2 2v14h14V5H5zm2 2h10v2H7V7zm0 4h10v2H7v-2zm0 4h6v2H7v-2z"
+          />
+        </svg>
+        <span class="ml-2 text-md font-normal text-text-primary"
+          >QuotesFlow</span
+        >
+      </div>
+    </div>
+  </div>
+</aside>
