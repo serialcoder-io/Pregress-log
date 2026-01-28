@@ -1,0 +1,11 @@
+<div 
+  class="card bg-base-100 shadow p-5 space-y-2 transform transition-all duration-300 
+  hover:-translate-y-1 hover:shadow-md cursor-pointer"
+  hx-get="{{url}}"
+  hx-trigger="click"
+  hx-target="#base-component"
+  hx-swap="innerHTML"
+  hx-push-url="true"
+>
+  {{slot}}
+</div>

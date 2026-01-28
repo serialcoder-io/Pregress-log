@@ -172,7 +172,7 @@ ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/tasks/goals/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 LOGIN_URL = '/accounts/login/'
@@ -253,6 +253,8 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
+
+
 
 
 # Default primary key field type

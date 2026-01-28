@@ -1,0 +1,52 @@
+<c-components.base>
+    <div class="pt-4 px-4">
+        <c-components.ui.bread_crumbs>
+            <c-components.ui.bread_crumb_link 
+                label="Dashboard" 
+                hx-get="{% url 'dashboard' %}"
+                hx-target="#base-component"
+                hx-swap="innerHTML"
+                hx-push-url="true"
+                class="font-medium text-base-content hover:text-neutral-600 hover:cursor-pointer"
+            />
+            <c-icons.chevron_right />
+            <c-components.ui.bread_crumb_link 
+                label="Goals" 
+                hx-get="{% url 'goals' %}"
+                hx-target="#base-component"
+                hx-swap="innerHTML"
+                hx-push-url="true"
+                class="font-medium text-base-content hover:text-neutral-600 hover:cursor-pointer"
+            />
+            <c-icons.chevron_right />
+            <li><a class="text-neutral-600">{{goal.name}}</a></li>
+        </c-components.ui.bread_crumb_link>
+    </div>
+  <div class="pt-4 px-4">
+    <div class="flex justify-between items-center">
+      <div class="flex flex-col">
+        <h2 class="text-3xl text-neutral">{{goal.name}}</h2>
+      </div>
+      <c-components.ui.button extra_class="btn-primary h-10 font-normal">
+        <c-slot name="text">
+          <c-icons.plus />
+          <span class="text-md font-semibold">Add subgoal</span>
+        </c-slot>
+      </c-components.ui.button>
+    </div>
+    <div>
+      <ol>
+        {% for subgoal in page_obj %}
+            <li>
+                {{subgoal.name}}
+                <ul>
+                    {% for skill in subgoal.preview_skills %}
+                        <li>{{skill.name}}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </div>
+</c-components.base>

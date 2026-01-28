@@ -1,0 +1,12 @@
+<c-vars status=" " />
+
+<div class="card-header flex justify-between">
+  <h3 class="text-xl">{{title}}</h3>
+  {% if status == "pending" %}
+    <span class="badge bg-neutral-800 text-white">{{status}}</span>
+  {% elif status == "in_progress" %}
+    <span class="badge bg-blue-500 text-white">{{status}}</span>
+  {% elif status == "finished" %}
+    <span class="badge bg-success text-white">{{status}}</span>
+  {% endif %}
+</div>

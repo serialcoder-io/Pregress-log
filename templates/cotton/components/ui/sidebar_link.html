@@ -1,9 +1,9 @@
 <c-vars curr_path=" " />
 <a
   curr_path="{{curr_path}}"
-  class="group flex gap-x-3 items-center px-3 py-2 text-md font-ligh hover:bg-base-300 hover:border-l-3 
+  class="group flex gap-x-3 items-center px-3 py-2 text-md font-ligh hover:bg-primary/5 hover:text-primary border-l-3 
   hover:border-primary rounded-lg transition-all duration-200 box-border hover:cursor-pointer
-  {% if curr_path in request.path %} border-l-primary border-l-3 bg-base-300 {% endif %}"
+  {% if curr_path in request.path %} border-l-primary bg-primary/5 text-primary {% else %} border-l-transparent {% endif %}"
 
   hx-get="{{url}}"
   hx-target="#base-component"
@@ -11,7 +11,7 @@
   hx-push-url="true"
 >
   <span
-    class="group-hover:bg-base-100 transition-all duration-200 
+    class="group-hover:bg-base-100 group-hover:text-primary transition-all duration-200 
     {% if curr_path in request.path %} bg-base-100 {% else %} 
     bg-base-300 text-base-content {% endif %} p-1 rounded-lg"
   >
