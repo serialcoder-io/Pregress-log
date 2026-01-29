@@ -4,30 +4,35 @@ from django.core.paginator import Paginator
 from django.db.models import Prefetch, F, Window
 from django.db.models.functions import RowNumber
 from .models import Goal, SubGoal, Skill
-from django.db.models import Count, Q, F, ExpressionWrapper, IntegerField, Value
+from django.db.models import Count, Q, F, ExpressionWrapper, IntegerField, Value, Sum, FloatField
 from django.db.models.functions import Coalesce, Cast
 
 
 @login_required
 def goals(request):
-
     goals = (
         request.user.goals
         .annotate(
-            all_subgoals_count=Count("subgoals"),
+            all_subgoals_count=Count("subgoals", distinct=True),
             finish_subgoals_count=Count(
                 "subgoals",
-                filter=Q(subgoals__status="finished")
+                filter=Q(subgoals__status="finished"),
+                distinct=True
             ),
-             progress=ExpressionWrapper(
+            skills_count=Count("subgoals__skills", distinct=True),
+            time_spent=Coalesce(
+                Sum('subgoals__skills__daily_reviews_skill__time_spent'),
+                Value(0),
+                output_field=FloatField()
+            ),
+            progress=ExpressionWrapper(
                 Cast(F('finish_subgoals_count'), IntegerField()) * 100
-                / Coalesce(F('all_subgoals_count'), Value(1)),
+                / Coalesce(Cast(F('all_subgoals_count'), IntegerField()), Value(1)),
                 output_field=IntegerField()
             )
-        )
+        ).order_by("created_at")
     )
 
-    
 
     paginator = Paginator(goals, 10)
     page_number = request.GET.get("page", 1)

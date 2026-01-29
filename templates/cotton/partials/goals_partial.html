@@ -51,7 +51,7 @@
           <option>Finished</option>
         </select>
       </div>
-      <div class="w-full grid grid-cols-1 lg:grid-cols-2">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-5">
         {% for goal in page_obj %}
          <c-components.ui.cards.goal url="{% url 'goal_details' goal.id %}">
             <c-components.ui.cards.goal.header
@@ -62,8 +62,8 @@
               description="{{ goal.description.html|safe|truncatechars_html:170 }}"
               finish_subgoals_count="{{goal.finish_subgoals_count}}"
               subgoals_count="{{goal.all_subgoals_count}}"
-              skills_count="3"
-              time_spent="{{goal.total_time_spent}} h"
+              skills_count="{{goal.skills_count}}"
+              time_spent="{{goal.time_spent}} h"
               progress="{{goal.progress}}"
             />
             <c-components.ui.cards.goal.footer

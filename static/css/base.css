@@ -75,3 +75,17 @@ p {
   scrollbar-width: thin; /* "auto", "thin" ou "none" */
   scrollbar-color: #9b9b9b4d transparent; /* thumb track */
 }
+
+.progress-orange {
+  color: rgb(255, 102, 0);
+}
+
+.progress-red {
+  color: rgb(221, 0, 0);
+}
+
+.progress-green-yellow {
+  color: rgb(209, 255, 3);
+}
+
+
