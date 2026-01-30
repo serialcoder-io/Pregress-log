@@ -1,0 +1,47 @@
+{% load duration %}
+
+<div class="card bg-base-100 shadow p-6 space-y-4 transform transition-all duration-300 
+  hover:-translate-y-1 hover:shadow-md cursor-pointer rounded-xl">
+  <!-- Header -->
+  <div class="flex justify-between items-start">
+    <div>
+      <h2 class="text-lg font-semibold">{{subgoal.name}}</h2>
+      <p class="text-sm text-base-content/60">
+        {{description.description|truncatechars_html:50}}
+      </p>
+    </div>
+    <c-components.ui.status_badge status="{{subgoal.status}}" label="{{subgoal.status}}" />
+  </div>
+
+  <!-- Progress -->
+  <div class="space-y-2">
+    <div class="flex justify-between text-sm text-base-content/70">
+      <span>Progress</span>
+      <span>{{subgoal.progress}}%</span>
+    </div>
+    <c-components.ui.progress_bar progress="{{subgoal.progress}}" />
+  </div>
+
+  <!-- Meta -->
+  <div class="flex items-center gap-6 text-sm text-base-content/70">
+    <div class="flex items-center gap-2">
+      <span class="icon">
+        <c-icons.target />
+      </span>
+      <span>{{subgoal.skills_count}} skills</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="icon">⏱</span>
+      <span>{{subgoal.time_spent|duration}} logged</span>
+    </div>
+  </div>
+
+  <div class="divider my-2"></div>
+
+  <!-- Skills -->
+  <div class="flex gap-2">
+    {% for skill in subgoal.preview_skills %}
+      <c-components.ui.badge_outline status="{{skill.status}}" label="{{skill.name}}" />
+    {% endfor %}
+  </div>
+</div>

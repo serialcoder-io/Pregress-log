@@ -18,19 +18,7 @@
             (0%)
           {% endif %}
       </div>
-      {% if progress|add:0 == 100 %}
-        <progress class="progress w-full progress-success" value={{progress}} max="100"></progress>
-      {% elif progress|add:0 > 75 %}
-        <progress class="progress w-full progress-green-yellow" value={{progress}} max="100"></progress>
-      {% elif progress|add:0 > 50 %}
-        <progress class="progress w-full progress-warning" value={{progress}} max="100"></progress>
-      {% elif progress|add:0 > 25 %} 
-        <progress class="progress w-full progress-orange" value={{progress}} max="100"></progress>
-      {% elif progress|add:0 > 1 %}
-        <progress class="progress w-full progress-red" value={{progress}} max="100"></progress>
-      {% else %}
-        <progress class="progress w-full" value={{progress}} max="100"></progress>
-      {% endif %}
+      <c-components.ui.progress_bar progress="{{progress}}" />
 
       <div class="divider mt-0"></div>
       <div class="grid grid-cols-3">

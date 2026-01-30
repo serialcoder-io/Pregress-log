@@ -1,0 +1,8 @@
+<c-vars status=" " label=" " />
+{% if status == "pending" %}
+<span class="badge bg-blue-50 border-blue-200 text-blue-800">{{label}}</span>
+{% elif status == "in_progress" %}
+<span class="badge bg-orange-50 border-orange-200 text-orange-800">{{label}}</span>
+{% elif status == "finished" %}
+<span class="badge bg-green-50 border-green-200 text-green-800">{{label}}</span>
+{% endif %}

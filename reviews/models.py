@@ -7,7 +7,7 @@ class DailyReviewSkill(models.Model):
     skill = models.ForeignKey('tasks.Skill', related_name="daily_reviews_skill", on_delete=models.CASCADE)
     daily_review = models.ForeignKey('reviews.DailyReview', related_name="daily_reviews_skill", on_delete=models.CASCADE)
     time_spent = models.DecimalField(
-        verbose_name=_("Time spent in hours"),
+        verbose_name=_("Time spent in minutes"),
         max_digits=5,
         decimal_places=2
     )
