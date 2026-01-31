@@ -1,16 +1,25 @@
 {% load duration %}
 
-<div class="card bg-base-100 shadow p-6 space-y-4 transform transition-all duration-300 
-  hover:-translate-y-1 hover:shadow-md cursor-pointer rounded-xl">
+<div
+  class="card bg-base-100 shadow p-6 space-y-4 transform transition-all duration-300 hover:-translate-y-1 hover:shadow-md cursor-pointer rounded-xl"
+  hx-get="{{url}}"
+  hx-trigger="click"
+  hx-target="#base-component"
+  hx-swap="innerHTML"
+  hx-push-url="true"
+>
   <!-- Header -->
   <div class="flex justify-between items-start">
     <div>
       <h2 class="text-lg font-semibold">{{subgoal.name}}</h2>
       <p class="text-sm text-base-content/60">
-        {{description.description|truncatechars_html:50}}
+        {{subgoal.description.html|truncatechars_html:50|safe}}
       </p>
     </div>
-    <c-components.ui.status_badge status="{{subgoal.status}}" label="{{subgoal.status}}" />
+    <c-components.ui.status_badge
+      status="{{subgoal.status}}"
+      label="{{subgoal.status}}"
+    />
   </div>
 
   <!-- Progress -->
@@ -36,12 +45,17 @@
     </div>
   </div>
 
-  <div class="divider my-2"></div>
-
-  <!-- Skills -->
-  <div class="flex gap-2">
-    {% for skill in subgoal.preview_skills %}
-      <c-components.ui.badge_outline status="{{skill.status}}" label="{{skill.name}}" />
-    {% endfor %}
+  <div class="pb-0 pt-2 mb-0 flex flex-col">
+    <span class="text-sm">skills</span>
+    <div class="divider pt-0 m-0"></div>
+    <!-- Skills -->
+    <div class="flex gap-2">
+      {% for skill in subgoal.preview_skills %}
+      <c-components.ui.badge_outline
+        status="{{skill.status}}"
+        label="{{skill.name}}"
+      />
+      {% endfor %}
+    </div>
   </div>
 </div>

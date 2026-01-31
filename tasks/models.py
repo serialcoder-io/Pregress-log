@@ -10,14 +10,14 @@ class StatusChoices(models.TextChoices):
 
 class Goal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="goals")
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="goals", db_index=True)
     name = models.CharField(verbose_name=_('goal name'), max_length=50)
     description = QuillField(verbose_name=_('description'), blank=True, null=True)
     created_at = models.DateTimeField(verbose_name=_('date created'), auto_now_add=True)
     started_at = models.DateTimeField(verbose_name=_('start date'), null=True, blank=True)
     completed_at = models.DateTimeField(verbose_name=_('end date'),  null=True, blank=True)
-    deadline_at = models.DateTimeField(verbose_name=_('deadline'), null=True, blank=True)
-    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING)
+    deadline_at = models.DateTimeField(verbose_name=_('deadline'), null=True, blank=True, db_index=True)
+    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING, db_index=True)
 
     @property
     def total_time_spent(self):
@@ -26,6 +26,9 @@ class Goal(models.Model):
     class Meta:
         db_table = 'goal'
         unique_together = ('user', 'name')
+        indexes = [
+            models.Index(fields=['user', 'status']),
+        ]
 
     def __str__(self):
         return self.name
@@ -33,14 +36,14 @@ class Goal(models.Model):
 
 class SubGoal(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, related_name="subgoals")
+    goal = models.ForeignKey(Goal, on_delete=models.CASCADE, related_name="subgoals", db_index=True)
     name = models.CharField(verbose_name=_('subgoal name'), max_length=50)
     description = QuillField(verbose_name=_('description'), blank=True, null=True)
     created_at = models.DateTimeField(verbose_name=_('date created'), auto_now_add=True)
     started_at = models.DateTimeField(verbose_name=_('start date'), null=True, blank=True)
     completed_at = models.DateTimeField(verbose_name=_('end date'),  null=True, blank=True)
     deadline_at = models.DateTimeField(verbose_name=_('deadline'), null=True, blank=True)
-    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING)
+    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING, db_index=True)
 
     @property
     def total_time_spent(self):
@@ -49,6 +52,9 @@ class SubGoal(models.Model):
     class Meta:
         db_table = 'subgoal'
         unique_together = ('goal', 'name')
+        indexes = [
+            models.Index(fields=['goal', 'status']),
+        ]
 
     def __str__(self):
         return f"{self.name} ({self.goal.name})"
@@ -56,13 +62,13 @@ class SubGoal(models.Model):
 
 class Skill(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
-    subgoal = models.ForeignKey(SubGoal, on_delete=models.CASCADE, related_name="skills")
+    subgoal = models.ForeignKey(SubGoal, on_delete=models.CASCADE, related_name="skills", db_index=True)
     name = models.CharField(verbose_name=_('skill name'), max_length=50)
     description = QuillField(verbose_name=_('description'), blank=True, null=True)
     created_at = models.DateTimeField(verbose_name=_('date created'), auto_now_add=True)
     started_at = models.DateTimeField(verbose_name=_('start date'), null=True, blank=True)
     completed_at = models.DateTimeField(verbose_name=_('end date'),  null=True, blank=True)
-    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING)
+    status = models.CharField(verbose_name=_('status'), max_length=20, choices=StatusChoices, default=StatusChoices.PENDING, db_index=True)
     
     @property
     def total_time_spent(self):
@@ -73,6 +79,9 @@ class Skill(models.Model):
     class Meta:
         db_table = 'skill'
         unique_together = ('subgoal', 'name')
+        indexes = [
+            models.Index(fields=['subgoal', 'status']),
+        ]
 
     def __str__(self):
         return f"{self.name} ({self.subgoal.name})"
@@ -80,8 +89,8 @@ class Skill(models.Model):
 
 class Resource(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name=_('ID'))
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name="resources")
-    name = models.CharField(verbose_name=_('Resource name'), max_length=50)
+    skill = models.ForeignKey(Skill, on_delete=models.CASCADE, related_name="resources", db_index=True)
+    name = models.CharField(verbose_name=_('Resource name'), max_length=50, db_index=True)
     url = models.URLField()
 
     class Meta:

@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.db.models import Prefetch, F, Window
 from django.db.models.functions import RowNumber
 from .models import Goal, SubGoal, Skill
-from django.db.models import Count, Q, F, ExpressionWrapper, IntegerField, Value, Sum
+from django.db.models import Count, Q, F, ExpressionWrapper, IntegerField, Value, Sum, Case, When
 from django.db.models.functions import Coalesce, Cast
 
 
@@ -25,14 +25,15 @@ def goals(request):
                 Value(0),
                 output_field=IntegerField()
             ),
-            progress=ExpressionWrapper(
-                Cast(F('finish_subgoals_count'), IntegerField()) * 100
-                / Coalesce(Cast(F('all_subgoals_count'), IntegerField()), Value(1)),
-                output_field=IntegerField()
+            progress = Case(
+                When(all_subgoals_count=0, then=Value(0)),
+                default=ExpressionWrapper(
+                    F('finish_subgoals_count') * 100 / F('all_subgoals_count'),
+                    output_field=IntegerField()
+                )
             )
         ).order_by("created_at")
     )
-
 
     paginator = Paginator(goals, 10)
     page_number = request.GET.get("page", 1)
@@ -45,7 +46,7 @@ def goals(request):
 
 
 @login_required
-def goal_details(request, id):
+def goal_details(request, goal_id):
     goal = get_object_or_404(
         Goal.objects.annotate(
             skills_count=Count("subgoals__skills", distinct=True),
@@ -65,27 +66,16 @@ def goal_details(request, id):
                 Value(0),
                 output_field=IntegerField()
             ),
-            progress=ExpressionWrapper(
-                Cast(F('finished_subgoals_count'), IntegerField()) * 100
-                / Coalesce(Cast(F('subgoals_count'), IntegerField()), Value(1)),
-                output_field=IntegerField()
+            progress= Case(
+                When(subgoals_count=0, then=Value(0)),
+                default=ExpressionWrapper(
+                    F("finished_subgoals_count") * 100 / F("subgoals_count"),
+                    output_field=IntegerField()
+                )
             )
         ),
-        id=id, 
+        id=goal_id, 
         user=request.user
-    )
-    skills_qs = Skill.objects.annotate(
-        row_number=Window(
-            expression=RowNumber(),
-            partition_by=[F('subgoal_id')],
-            order_by=F('created_at').asc()
-        ),
-    ).filter(row_number__lte=3)
-
-    skills_prefetch = Prefetch(
-        'skills',
-        queryset=skills_qs,
-        to_attr='preview_skills'
     )
 
     subgoals = (
@@ -102,19 +92,93 @@ def goal_details(request, id):
                 filter=Q(skills__status="finished"),
                 distinct=True
             ),
-            progress=ExpressionWrapper(
-                Cast(F('finished_skills_count'), IntegerField()) * 100
-                / Coalesce(Cast(F('skills_count'), IntegerField()), Value(1)),
-                output_field=IntegerField()
+            progress=Case(
+                When(skills_count=0, then=Value(0)),
+                default=ExpressionWrapper(
+                    F("finished_skills_count") * 100 / F("skills_count"),
+                    output_field=IntegerField()
+                )
             )
-        )
-        .prefetch_related(skills_prefetch)
+        ).order_by("created_at")
     )
     paginator = Paginator(subgoals, 10)
     page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
+    for subgoal in page_obj:
+        subgoal.preview_skills = subgoal.skills.all()[:3]
     context = {"page_obj": page_obj, "goal": goal}
 
     if request.htmx:
         return render(request, "cotton/partials/goal_details_page.html", context)
     return render(request, "tasks/goal_details.html", context)
+
+
+@login_required
+def subgoal_details(request, goal_id, subgoal_id):
+    subgoal = get_object_or_404(
+        SubGoal.objects.annotate(
+            skills_count=Count("skills", distinct=True),
+            finished_skills_count=Count(
+                "skills",
+                filter=Q(skills__status="finished"),
+                distinct=True
+            ),
+            in_progress_skills_count=Count(
+                "skills",
+                filter=Q(skills__status="in_progress"),
+                distinct=True
+            ),
+            pending_skills_count=Count(
+                "skills",
+                filter=Q(skills__status="pending"),
+                distinct=True
+            ),
+            time_spent=Coalesce(
+                Sum('skills__daily_reviews_skill__time_spent'),
+                Value(0),
+                output_field=IntegerField()
+            ),
+            progress = Case(
+                When(skills_count=0, then=Value(0)),
+                default=ExpressionWrapper(
+                    F("finished_skills_count") * 100 / F("skills_count"),
+                    output_field=IntegerField()
+                )
+            ),
+            weekly_reviews_count=Count(
+                "weekly_reviews_for_subgoal",
+                distinct=True
+            )
+        ).prefetch_related(
+            Prefetch(
+                "skills",
+                queryset=Skill.objects.annotate(
+                    time_spent=Coalesce(
+                        Sum("daily_reviews_skill__time_spent"),
+                        Value(0),
+                        output_field=IntegerField()
+                    )
+                )
+            )
+        ),
+        id=subgoal_id,
+        goal__id=goal_id,
+        goal__user=request.user
+    )
+
+    skills = subgoal.skills.annotate(
+        reviews_count=Count("daily_reviews_skill", distinct=True),
+        time_spent=Coalesce(
+            Sum("daily_reviews_skill__time_spent"),
+            Value(0),
+            output_field=IntegerField()
+        )
+    ).order_by("created_at")
+    paginator = Paginator(skills, 10)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+    skills = page_obj
+    context = {"subgoal": subgoal, "skills": skills}
+    if request.htmx:
+        return render(request, "cotton/partials/subgoal_details_page.html", context)
+    return render(request, "tasks/subgoal_details.html", context)

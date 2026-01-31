@@ -61,7 +61,7 @@
               label="{{goal.status}}"
             />
             <c-components.ui.tasks.goal_card.body
-              description="{{ goal.description.html|safe|truncatechars_html:170 }}"
+              description="{{ goal.description.html|safe|truncatechars_html:150 }}"
               finish_subgoals_count="{{goal.finish_subgoals_count}}"
               subgoals_count="{{goal.all_subgoals_count}}"
               skills_count="{{goal.skills_count}}"

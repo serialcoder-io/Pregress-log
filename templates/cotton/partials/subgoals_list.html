@@ -2,7 +2,7 @@
   <c-components.tasks.subgoals_filter_section />  
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
     {% for subgoal in page_obj %}
-        <c-components.ui.tasks.subgoal_card />
+        <c-components.ui.tasks.subgoal_card url="{% url 'subgoal_details' goal_id=subgoal.goal.id subgoal_id=subgoal.id %}" />
     {% endfor %}
   </div>
 </div>

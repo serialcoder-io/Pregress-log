@@ -1,0 +1,8 @@
+<div class="pt-5 space-y-6">
+  <c-components.tasks.subgoals_filter_section />
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    {% for skill in skills %}
+    <c-components.ui.tasks.skill_card />
+    {% endfor %}
+  </div>
+</div>

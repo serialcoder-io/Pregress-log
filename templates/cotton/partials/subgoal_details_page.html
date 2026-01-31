@@ -1,0 +1,80 @@
+<c-components.base>
+  <c-components.ui.description_dialog
+    title="{{subgoal.name}}"
+    description="{{subgoal.description.html|safe}}"
+  />
+  <div class="pt-4 px-4">
+    <c-components.ui.bread_crumbs>
+      <c-components.ui.bread_crumb_link 
+        label="Dashboard" 
+        hx-get="{% url 'dashboard' %}"
+        hx-target="#base-component"
+        hx-swap="innerHTML"
+        hx-push-url="true"
+        class="font-medium text-base-content hover:text-neutral-600 hover:cursor-pointer"
+      />
+      <c-icons.chevron_right />
+      <c-components.ui.bread_crumb_link 
+          label="Goals" 
+          hx-get="{% url 'goals' %}"
+          hx-target="#base-component"
+          hx-swap="innerHTML"
+          hx-push-url="true"
+          class="font-medium text-base-content hover:text-neutral-600 hover:cursor-pointer"
+      />
+      <c-icons.chevron_right />
+      <c-components.ui.bread_crumb_link 
+          label="{{subgoal.goal.name}}" 
+          hx-get="{% url 'goal_details' subgoal.goal.id %}"
+          hx-target="#base-component"
+          hx-swap="innerHTML"
+          hx-push-url="true"
+          class="font-medium text-base-content hover:text-neutral-600 hover:cursor-pointer"
+      />
+      <c-icons.chevron_right />
+      <li><a class="text-neutral-600">{{subgoal.name}}</a></li>
+    </c-components.ui.bread_crumb_link>
+  </div>
+  <div class="pt-4 px-4">
+    <div class="flex justify-between items-center">
+      <div class="flex gap-4 items-center">
+        <h2 class="text-3xl text-neutral">{{subgoal.name}}</h2>
+        <c-components.ui.status_badge status="{{subgoal.status}}" label="{{subgoal.status}}" />
+      </div>
+      <div class="flex items-center gap-3">
+        <c-components.ui.button extra_class="h-10 font-normal">
+          <c-slot name="text">
+            <c-icons.pencil_square />
+            <span class="text-md font-normal">Edit sub-goal</span>
+          </c-slot>
+        </c-components.ui.button>
+
+        <c-components.ui.button extra_class="h-10 font-normal">
+          <c-slot name="text">
+            <c-icons.trash />
+            <span class="text-md font-normal">Delete</span>
+          </c-slot>
+        </c-components.ui.button>
+      </div>
+    </div>
+    <div class="py-3 w-full lg:w-2/3 flex gap-2">
+      {{ subgoal.description.html|safe|truncatechars_html:90 }}
+      <button class="hover:cursor-pointer hover:text-primary" onclick="description_modal.showModal()">Read more</button>
+    </div>
+    <c-components.tasks.subgoal_stats />
+    <div class="py-6">
+      <div class="flex justify-between items-center">
+        <div class="flex flex-col">
+          <h2 class="text-2xl font-normal text-neutral">Skills</h2>
+        </div>
+        <c-components.ui.button extra_class="btn-primary h-10 font-normal">
+          <c-slot name="text">
+            <c-icons.plus />
+            <span class="text-md font-light">Add Skill</span>
+          </c-slot>
+        </c-components.ui.button>
+      </div>
+      <c-partials.skills_list />
+    </div>
+  </div>
+</c-components.base>

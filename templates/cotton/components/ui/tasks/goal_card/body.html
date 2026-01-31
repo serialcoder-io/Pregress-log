@@ -1,42 +1,43 @@
 <div class="card-body p-0">
-    <div>
-      {{ description }}
+  <div class="py-2">
+    {{ description }}
+  </div>
+  <div class="py-2">
+    <div class="flex justify-between">
+      <span>Progress</span>
+      <span>
+        {{finish_subgoals_count}}/{{subgoals_count}} 
+        {% if subgoals_count|add:0 > 1 %}
+          subgoals
+        {% else %}
+          subgoal
+        {% endif %}
+        {% if subgoals_count|add:0 > 0 %}
+            ({{progress}}%)
+        {% else %}
+          (0%)
+        {% endif %}
     </div>
-    <div class="py-2">
-      <div class="flex justify-between">
-        <span>Progress</span>
-        <span>
-          {{finish_subgoals_count}}/{{subgoals_count}} 
-          {% if subgoals_count|add:0 > 1 %}
-            subgoals
-          {% else %}
-            subgoal
-          {% endif %}
-          {% if subgoals_count|add:0 > 0 %}
-             ({{progress}}%)
-          {% else %}
-            (0%)
-          {% endif %}
-      </div>
-      <c-components.ui.progress_bar progress="{{progress}}" />
+    <c-components.ui.progress_bar progress="{{progress}}" />
 
-      <div class="divider mt-0"></div>
-      <div class="grid grid-cols-3">
-        <div class="flex flex-col items-center gap-0">
-          <div class="font-bold text-md">{{subgoals_count}}</div>
-          {% if subgoals_count|add:0 > 1 %}
-            <div class="text-neutral-500">sub-goals</div>
-          {% else %}
-            <div class="text-neutral-500">sub-goal</div>
-          {% endif %}
-        </div>
-        <div class="flex flex-col items-center gap-0">
-          <span class="font-bold text-md">{{skills_count}}</span>
-          <span class="text-neutral-500">skills</span>
-        </div>
-        <div class="flex flex-col items-center gap-0">
-          <span class="font-bold text-md">{{time_spent}}</span>
-          <span class="text-neutral-500">Time spent</span>
-        </div>
+    <div class="divider mt-0"></div>
+    <div class="grid grid-cols-3">
+      <div class="flex flex-col items-center gap-0">
+        <div class="font-bold text-lg py-0">{{subgoals_count}}</div>
+        {% if subgoals_count|add:0 > 1 %}
+          <div class="text-neutral-500 text-sm py-0">sub-goals</div>
+        {% else %}
+          <div class="text-neutral-500 text-sm py-0">sub-goal</div>
+        {% endif %}
+      </div>
+      <div class="flex flex-col items-center gap-0">
+        <span class="font-bold text-lg py-0">{{skills_count}}</span>
+        <span class="text-neutral-500 text-sm py-0">skills</span>
+      </div>
+      <div class="flex flex-col items-center gap-0">
+        <span class="font-bold text-lg py-0">{{time_spent}}</span>
+        <span class="text-neutral-500 text-sm py-0">Time spent</span>
       </div>
     </div>
+  </div>
+</div>

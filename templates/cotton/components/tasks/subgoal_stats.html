@@ -1,0 +1,49 @@
+{% load duration %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 py-4">
+  
+  <!-- Overall Progress -->
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <p class="text-md text-gray-500 font-medium">Overall Progress</p>
+
+      <h2 class="text-2xl font-bold">{{subgoal.progress}}%</h2>
+
+      <c-components.ui.progress_bar progress="{{subgoal.progress}}" />
+
+      <p class="text-sm text-gray-400 mt-1">{{subgoal.finished_skills_count}}/{{subgoal.skills_count}} skills completed</p>
+    </div>
+  </div>
+
+  <!-- Skills Progress -->
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <p class="text-md text-gray-500 font-medium">Total Skills</p>
+
+      <h2 class="text-2xl font-bold">{{subgoal.skills_count}}</h2>
+      <p class="text-sm text-gray-400">{{subgoal.pending_skills_count}} pending, {{subgoal.in_progress_skills_count}} in progress</p>
+    </div>
+  </div>
+
+  <!-- Time Spent -->
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <p class="text-md text-gray-500 font-medium">Time Invested</p>
+
+      <h2 class="text-2xl font-bold">{{subgoal.time_spent|duration}}</h2>
+
+      <p class="text-sm text-gray-400">Total time spent on this sub-goal</p>
+    </div>
+  </div>
+
+  <!-- Deadline -->
+  <div class="card bg-base-100 shadow-md">
+    <div class="card-body">
+      <p class="text-md text-gray-500 font-medium">Weekly Reviews</p>
+
+      <h2 class="text-2xl font-bold">{{ subgoal.weekly_reviews_count }}</h2>
+
+      <p class="text-sm text-gray-400">Reviews mentionning this sub-goal</p>
+    </div>
+  </div>
+
+</div>
